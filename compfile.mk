@@ -1,7 +1,8 @@
 CC = clang
 CXX = clang++
 CXXOUTNAME = mongoExp
-CXXFLAGS = -std=c++14 -Wall -ftemplate-depth=1024
+CXXFLAGS = -std=c++14
+CXXFLAGS += -Wall -ftemplate-depth=1024 -Werror=return-type
 CXXOPT += -O2 -funroll-loops -DNDEBUG  
 ifneq ($(shell uname -s),Darwin)
 	CXXOPT += -march=native -mtune=native
@@ -10,7 +11,7 @@ endif
 #debug
 CXXDEBUG = -g -gstabs+ 
 INSTALL_DIR=./mongoExp
-EXT_PATH=$(realpath ../external/)
+EXT_PATH=$(realpath /Users/nick/hathaway/external)
 
 USE_CPPITERTOOLS = 0
 USE_CPPPROGUTILS = 0
@@ -27,10 +28,9 @@ USE_PEAR = 0
 USE_CURL = 0
 USE_GTKMM = 0
 USE_BIBSEQ = 0
-USE_BIBCPP = 0
+USE_BIBCPP = 1#develop
 USE_SEEKDEEP = 0
 USE_BIBSEQDEV = 0
-USE_BIBCPPDEV = 1
 USE_SEEKDEEPDEV = 0
 USE_CATCH = 0
 USE_JSONCPP = 0
@@ -38,5 +38,7 @@ USE_TWOBIT = 0
 USE_SEQSERVER = 0
 USE_NJHRINSIDE = 0
 USE_PSTREAMS = 0
-USE_MONGOC = 1
-USE_MONGOCXX = 1
+USE_MONGOC = 0
+USE_MONGOCXX = 1#r3.0.1
+USE_SHAREDMUTEX = 0
+USE_MAGIC = 0
