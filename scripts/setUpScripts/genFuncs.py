@@ -6,20 +6,34 @@ from utils import Utils
 
 class genHelper:
     @staticmethod
-    def generateCompfileFull(outFileName, externalDirLoc, cc, cxx, outName, installDirName, installDirLoc, neededLibs):
+    def generateCompfileFull(outFileName, externalDirLoc, cc, cxx, outName, installDirName, installDirLoc, neededLibs,ldFlags = ""):
         availableLibs = ["CPPITERTOOLS","CPPPROGUTILS","ZI_LIB","BOOST","R","BAMTOOLS","CPPCMS","MATHGL","ARMADILLO",
                          "MLPACK","LIBLINEAR","PEAR","CURL","GTKMM", "BIBSEQ", "BIBCPP", "SEEKDEEP", 
-                         "BIBSEQDEV", "BIBCPPDEV", "SEEKDEEPDEV", "CATCH", "JSONCPP",
-                          "TWOBIT", "SEQSERVER","NJHRINSIDE", "PSTREAMS", "MONGOC", "MONGOCXX"]
-        neededLibs = map(lambda x:x.upper(), neededLibs)
-        """@todo: Make some of these default to an envirnment CC and CXX and maybe even CXXFLAGS as well 
-            @todo: Make availableLibs a more universal constant"""
+                         "BIBSEQDEV", "SEEKDEEPDEV", "CATCH", "JSONCPP",
+                          "TWOBIT", "SEQSERVER","NJHRINSIDE", "PSTREAMS", "MONGOC", "MONGOCXX", "SHAREDMUTEX", "MAGIC"]
+        neededLibraries = {}
+        for lib in neededLibs:
+            if ":" in lib:
+                libSplit = lib.split(":")
+                neededLibraries[libSplit[0].upper()] = libSplit[1]
+            else:
+                neededLibraries[lib.upper()] = ""
+        """
+            @todo: Make some of these default to an envirnment CC and CXX and maybe even CXXFLAGS as well 
+            @todo: Make availableLibs a more universal constant
+        """
         with open(outFileName, "w") as f:
             f.write("CC = {CC}\n".format(CC = cc))
             f.write("CXX = {CXX}\n".format(CXX = cxx))
             f.write("CXXOUTNAME = {NAME_OF_PROGRAM}\n".format(NAME_OF_PROGRAM = outName))
-            #f.write("CXXFLAGS = -std=c++11 -Wall -ftemplate-depth=1024\n")
-            f.write("CXXFLAGS = -std=c++14 -Wall -ftemplate-depth=1024\n")
+            #f.write("CXXFLAGS = -std=c++11\n")
+            f.write("CXXFLAGS = -std=c++14\n")
+            f.write("CXXFLAGS += -Wall -ftemplate-depth=1024 -Werror=return-type\n")
+            if "" != ldFlags:
+                f.write("LD_FLAGS = ")
+                if not ldFlags.startswith("-"):
+                    f.write("-")
+                f.write("{ld_flags}\n".format(ld_flags = " ".join(ldFlags.split(","))))
             f.write("CXXOPT += -O2 -funroll-loops -DNDEBUG  \n")
             f.write("ifneq ($(shell uname -s),Darwin)\n")
             f.write("\tCXXOPT += -march=native -mtune=native\n" )
@@ -32,10 +46,14 @@ class genHelper:
             #f.write("SCRIPTS_DIR=$(realpath scripts)\n")
             f.write("\n")
             for lib in availableLibs:
-                if lib in neededLibs:
-                    f.write("USE_{LIB} = 1\n".format(LIB = lib))
+                if lib in neededLibraries:
+                    if neededLibraries[lib] == "":
+                        f.write("USE_{LIB} = 1\n".format(LIB = lib))
+                    else:
+                        f.write("USE_{LIB} = 1#{BRANCH}\n".format(LIB = lib, BRANCH = neededLibraries[lib]))
                 else:
                     f.write("USE_{LIB} = 0\n".format(LIB = lib))
+                    
 
 
     @staticmethod            
@@ -73,11 +91,15 @@ class genHelper:
         return parser.parse_args()
     
     @staticmethod
-    def mkConfigCmd(name,libs, argv):
+    def mkConfigCmd(name,libs, argv, ldflags=""):
         if libs == "":
             cmd = "./scripts/setUpScripts/njhConfigure.py -name {name} ".format(name=name)
         else:
             cmd = "./scripts/setUpScripts/njhConfigure.py -name {name} -libs {libs}".format(name=name, libs=libs)
+        if "" != ldflags:
+            if ldflags.startswith("-"):
+                ldflags = ldflags[1:]
+            cmd += " -ldFlags " + ldflags
         if len(sys.argv) > 1:
             cmd += " " + " ".join(sys.argv[1:])
         return cmd
