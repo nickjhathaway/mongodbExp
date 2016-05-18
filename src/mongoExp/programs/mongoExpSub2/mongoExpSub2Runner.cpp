@@ -15,7 +15,7 @@ mongoExpSub2Runner::mongoExpSub2Runner()
     : bib::progutils::programRunner({addFunc("hellowWorld2", hellowWorld2, false)},
                     "mongoExpSub2") {}
                     
-int mongoExpSub2Runner::hellowWorld2(std::map<std::string, std::string> inputCommands) {
+int mongoExpSub2Runner::hellowWorld2(const bib::progutils::CmdArgs & inputCommands) {
   mongoExpSub2SetUp setUp(inputCommands);
   std::string name = "World";
   setUp.setOption(name, "--name", "Someone's Name");

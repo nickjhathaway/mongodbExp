@@ -15,7 +15,7 @@ class mongoExpSub2Runner : public bib::progutils::programRunner {
  public:
   mongoExpSub2Runner();
   
-  static int hellowWorld2(std::map<std::string, std::string> inputCommands);
+  static int hellowWorld2(const bib::progutils::CmdArgs & inputCommands);
 
 };
 } // namespace mongoExp

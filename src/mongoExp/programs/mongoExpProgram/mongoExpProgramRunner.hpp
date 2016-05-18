@@ -15,7 +15,7 @@ class mongoExpProgramRunner : public bib::progutils::oneRing {
  public:
   mongoExpProgramRunner();
   
-  static int hellowWorldMain(std::map<std::string, std::string> inputCommands);
+  static int hellowWorldMain(const bib::progutils::CmdArgs & inputCommands);
 
 };
 } // namespace mongoExp

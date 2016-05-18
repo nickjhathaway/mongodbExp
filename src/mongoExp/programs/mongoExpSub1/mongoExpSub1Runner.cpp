@@ -42,7 +42,7 @@ mongoExpSub1Runner::mongoExpSub1Runner()
 																		 addFunc("mongoTest2", mongoTest2, false)},
                     "mongoExpSub1") {}
                     
-int mongoExpSub1Runner::printCollectionDocuments(std::map<std::string, std::string> inputCommands) {
+int mongoExpSub1Runner::printCollectionDocuments(const bib::progutils::CmdArgs & inputCommands) {
   mongoExpSub1SetUp setUp(inputCommands);
   std::string database = "test";
   std::string collection = "restaurants";
@@ -72,8 +72,8 @@ int mongoExpSub1Runner::printCollectionDocuments(std::map<std::string, std::stri
   }
   std::ostream out(buf);
 
-  auto db = conn[database];   //get the "test" database
-  auto col = db[collection];  //a collection in the "test" database
+  mongocxx::database db = conn[database];   //get the "test" database
+  mongocxx::collection col = db[collection];  //a collection in the "test" database
   auto cursor = col.find({}); //all the documents in the "restaurants" collection
   for (auto&& doc : cursor) {
 
@@ -84,7 +84,7 @@ int mongoExpSub1Runner::printCollectionDocuments(std::map<std::string, std::stri
 
 
 
-int mongoExpSub1Runner::printDatabases(std::map<std::string, std::string> inputCommands) {
+int mongoExpSub1Runner::printDatabases(const bib::progutils::CmdArgs & inputCommands) {
   mongoExpSub1SetUp setUp(inputCommands);
   std::string outFilename = "";
   uint32_t port = 27017;
@@ -134,7 +134,7 @@ int mongoExpSub1Runner::printDatabases(std::map<std::string, std::string> inputC
   return 0;
 }
 
-int mongoExpSub1Runner::mongoTest2(std::map<std::string, std::string> inputCommands) {
+int mongoExpSub1Runner::mongoTest2(const bib::progutils::CmdArgs & inputCommands) {
   mongoExpSub1SetUp setUp(inputCommands);
   std::string name = "World";
   setUp.setOption(name, "--name", "Someone's Name");
@@ -168,7 +168,7 @@ int mongoExpSub1Runner::mongoTest2(std::map<std::string, std::string> inputComma
               << "score" << 17 << close_document << close_array
       << "name" << "Vella"
       << "restaurant_id" << "41704620" << finalize;
-  auto res = db["restaurants"].insert_one(restaurant_doc);
+  auto res = db["restaurants"].insert_one(restaurant_doc.view());
   // @end: cpp-insert-a-document
   return 0;
 }
