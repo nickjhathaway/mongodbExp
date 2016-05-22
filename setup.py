@@ -297,7 +297,7 @@ class Packages():
         return pack
 
     def __bamtools(self):
-        url = 'https://github.com/pezmaster31/bamtools.git'
+        url = 'https://github.com/nickjhathaway/bamtools.git'
         name = "bamtools"
         buildCmd = "mkdir -p build && cd build && CC={CC} CXX={CXX} cmake -DCMAKE_INSTALL_PREFIX:PATH={local_dir} .. && make -j {num_cores} install"
         pack = CPPLibPackage(name, buildCmd, self.dirMaster_, "git", "v2.4.0")
