@@ -8,7 +8,9 @@
     
 #include "mongoExpSub1Runner.hpp"
 #include <mongocxx/client.hpp>
+#include <mongocxx/database.hpp>
 #include <mongocxx/instance.hpp>
+#include <mongocxx/collection.hpp>
 #include <mongocxx/options/find.hpp>
 
 #include <bsoncxx/builder/stream/document.hpp>
@@ -62,15 +64,9 @@ int mongoExpSub1Runner::printCollectionDocuments(const bib::progutils::CmdArgs &
   mongocxx::instance inst{}; //a mongod instance must be around for mongo commands to work;
   mongocxx::client conn{mongocxx::uri{"mongodb://localhost:" + estd::to_string(port)}};   //a client to interact with the mongod instance, defaults to default ports, do mongocxx::client{"mongodb://localhost:27017"} to control port and host
 
-  std::streambuf * buf;
+
   std::ofstream outFile;
-  if(outFilename != ""){
-  	bib::files::openTextFile(outFile, outFilename, overWrite, append, exitOnFailure);
-  	buf =  outFile.rdbuf();
-  }else{
-  	buf = std::cout.rdbuf();
-  }
-  std::ostream out(buf);
+  std::ostream out(bib::files::determineOutBuf(outFile, outFilename, ".json", overWrite, append, exitOnFailure));
 
   mongocxx::database db = conn[database];   //get the "test" database
   mongocxx::collection col = db[collection];  //a collection in the "test" database
@@ -102,15 +98,9 @@ int mongoExpSub1Runner::printDatabases(const bib::progutils::CmdArgs & inputComm
   mongocxx::client conn;
   conn = mongocxx::client{mongocxx::uri{"mongodb://localhost:" + estd::to_string(port)}};   //a client to interact with the mongod instance, defaults to default ports, do mongocxx::client{"mongodb://localhost:27017"} to control port and host
 
-  std::streambuf* buf;
   std::ofstream outFile;
-  if(outFilename != ""){
-  	bib::files::openTextFile(outFile, outFilename, overWrite, append, exitOnFailure);
-  	buf = outFile.rdbuf();
-  }else{
-  	buf = std::cout.rdbuf();
-  }
-  std::ostream out(buf);
+  std::ostream out(bib::files::determineOutBuf(outFile, outFilename, ".json", overWrite, append, exitOnFailure));
+
   std::shared_ptr<mongocxx::cursor> curs = std::make_shared<mongocxx::cursor>(conn.list_databases());
 	Json::Reader reader;
 
@@ -142,7 +132,7 @@ int mongoExpSub1Runner::mongoTest2(const bib::progutils::CmdArgs & inputCommands
   mongocxx::instance inst{};
   mongocxx::client conn{};
 
-  auto db = conn["test"];
+  mongocxx::database db = conn["test"];
 
   // TODO: fix dates
 
@@ -168,7 +158,8 @@ int mongoExpSub1Runner::mongoTest2(const bib::progutils::CmdArgs & inputCommands
               << "score" << 17 << close_document << close_array
       << "name" << "Vella"
       << "restaurant_id" << "41704620" << finalize;
-  auto res = db["restaurants"].insert_one(restaurant_doc.view());
+  mongocxx::collection rCollection = db["restaurants"];
+  auto res = rCollection.insert_one(restaurant_doc.view());
   // @end: cpp-insert-a-document
   return 0;
 }
