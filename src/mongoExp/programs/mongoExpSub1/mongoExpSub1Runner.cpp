@@ -134,7 +134,7 @@ int mongoExpSub1Runner::mongoTest2(const bib::progutils::CmdArgs & inputCommands
 
   mongocxx::database db = conn["test"];
 
-  // TODO: fix dates
+  /**@todo: fix dates*/
 
   // @begin: cpp-insert-a-document
   document restaurant_doc;
@@ -149,11 +149,11 @@ int mongoExpSub1Runner::mongoTest2(const bib::progutils::CmdArgs & inputCommands
       << "cuisine"  << "Italian"
       << "grades"   << open_array
           << open_document
-              << "date" << bsoncxx::types::b_date{12323}
+              << "date" << bsoncxx::types::b_date{std::chrono::milliseconds{12323}}
               << "grade" << "A"
               << "score" << 11 << close_document
           << open_document
-              << "date" << bsoncxx::types::b_date{121212}
+              << "date" << bsoncxx::types::b_date{std::chrono::milliseconds{121212}} //this std::chrono::milliseconds, makes this compile but i don't think this is the intended date from the example haha
               << "grade" << "B"
               << "score" << 17 << close_document << close_array
       << "name" << "Vella"

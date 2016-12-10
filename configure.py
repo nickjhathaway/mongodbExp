@@ -7,7 +7,7 @@ from genFuncs import genHelper
 
 def main():
     name = "mongoExp"
-    libs = "bibcpp:develop,mongocxx:r3.0.1"
+    libs = "bibcpp:develop,mongocxx:r3.1.0-rc0"
     args = genHelper.parseNjhConfigureArgs()
     cmd = genHelper.mkConfigCmd(name, libs, sys.argv)
     Utils.run(cmd)
