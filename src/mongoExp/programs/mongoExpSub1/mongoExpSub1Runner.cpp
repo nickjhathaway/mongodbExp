@@ -153,7 +153,7 @@ int mongoExpSub1Runner::mongoTest2(const bib::progutils::CmdArgs & inputCommands
               << "grade" << "A"
               << "score" << 11 << close_document
           << open_document
-              << "date" << bsoncxx::types::b_date{std::chrono::milliseconds{121212}} //this std::chrono::milliseconds, makes this compile but i don't think this is the intended date from the example haha
+              << "date" << bsoncxx::types::b_date{std::chrono::milliseconds{121212}}   //this std::chrono::milliseconds, makes this compile but i don't think this is the intended date from the example haha
               << "grade" << "B"
               << "score" << 17 << close_document << close_array
       << "name" << "Vella"
