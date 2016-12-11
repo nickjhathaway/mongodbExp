@@ -29,3 +29,5 @@
 
 *.pyc
 bin/*
+mongoExp
+compfile.mk
