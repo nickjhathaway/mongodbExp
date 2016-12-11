@@ -162,6 +162,8 @@ int mongoExpSub1Runner::mongoTest2(const bib::progutils::CmdArgs & inputCommands
   auto res = rCollection.insert_one(restaurant_doc.view());
   // @end: cpp-insert-a-document
   return 0;
+
+
 }
 
 
