@@ -11,7 +11,7 @@
 
 namespace mongoExp {
 
-class mongoExpSub1Runner : public bib::progutils::programRunner {
+class mongoExpSub1Runner : public bib::progutils::ProgramRunner {
  public:
   mongoExpSub1Runner();
   

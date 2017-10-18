@@ -15,7 +15,7 @@
 namespace mongoExp {
 
 mongoExpProgramRunner::mongoExpProgramRunner()
-    : bib::progutils::oneRing({addRing(std::make_shared<mongoExpSub1Runner>()),addRing(std::make_shared<mongoExpSub2Runner>()),},{addFunc("hellowWorldMain", hellowWorldMain, false)},
+    : bib::progutils::OneRing({addRing(std::make_shared<mongoExpSub1Runner>()),addRing(std::make_shared<mongoExpSub2Runner>()),},{addFunc("hellowWorldMain", hellowWorldMain, false)},
                     "mongoExp") {}
                     
 int mongoExpProgramRunner::hellowWorldMain(const bib::progutils::CmdArgs & inputCommands) {

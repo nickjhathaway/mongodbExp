@@ -12,7 +12,7 @@
 namespace mongoExp {
 
 mongoExpSub2Runner::mongoExpSub2Runner()
-    : bib::progutils::programRunner({addFunc("hellowWorld2", hellowWorld2, false)},
+    : bib::progutils::ProgramRunner({addFunc("hellowWorld2", hellowWorld2, false)},
                     "mongoExpSub2") {}
                     
 int mongoExpSub2Runner::hellowWorld2(const bib::progutils::CmdArgs & inputCommands) {

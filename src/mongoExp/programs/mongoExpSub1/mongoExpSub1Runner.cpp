@@ -39,7 +39,7 @@ T && removeAllWhitespace(T && s) {
 }
 
 mongoExpSub1Runner::mongoExpSub1Runner()
-    : bib::progutils::programRunner({addFunc("printCollectionDocuments", printCollectionDocuments, false),
+    : bib::progutils::ProgramRunner({addFunc("printCollectionDocuments", printCollectionDocuments, false),
 																     addFunc("printDatabases", printDatabases, false),
 																		 addFunc("mongoTest2", mongoTest2, false)},
                     "mongoExpSub1") {}
@@ -102,18 +102,9 @@ int mongoExpSub1Runner::printDatabases(const bib::progutils::CmdArgs & inputComm
   std::ostream out(bib::files::determineOutBuf(outFile, outFilename, ".json", overWrite, append, exitOnFailure));
 
   std::shared_ptr<mongocxx::cursor> curs = std::make_shared<mongocxx::cursor>(conn.list_databases());
-	Json::Reader reader;
-
 	try {
 	  for (auto&& doc : *curs) {
-	  	Json::Value root;
-	  	auto status =  reader.parse(bsoncxx::to_json(doc),root);
-	  	if(status){
-	  		out << root<< std::endl;
-	  	}else{
-	  		out << "Failed to read" << std::endl;
-	  	}
-
+	  	Json::Value root = bib::json::parse(bsoncxx::to_json(doc));
 	  	out << bsoncxx::to_json(doc) << std::endl;
 	  }
 	} catch (std::exception & e) {

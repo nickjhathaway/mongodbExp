@@ -10,9 +10,11 @@
 
 namespace mongoExp {
 
-class mongoExpProgramSetUp : public bib::progutils::programSetUp {
+class mongoExpProgramSetUp : public bib::progutils::ProgramSetUp {
 
  public:
-    using programSetUp::programSetUp; //include programSetUp's constructors
+    using ProgramSetUp::ProgramSetUp; //include programSetUp's constructors
 };
 } // namespace mongoExp
+
+//bib::progutils::programSetUp

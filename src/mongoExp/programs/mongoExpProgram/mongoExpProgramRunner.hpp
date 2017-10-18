@@ -11,7 +11,7 @@
 
 namespace mongoExp {
 
-class mongoExpProgramRunner : public bib::progutils::oneRing {
+class mongoExpProgramRunner : public bib::progutils::OneRing {
  public:
   mongoExpProgramRunner();
   
